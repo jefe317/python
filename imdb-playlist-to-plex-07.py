@@ -14,7 +14,6 @@ for package in required_packages:
 		print(f"Installing {package}...")
 		install_package(package)
 
-# Now import the packages
 import requests
 from plexapi.server import PlexServer
 import re
