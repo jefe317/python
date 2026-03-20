@@ -1,6 +1,6 @@
 """
 Image to Web-Ready JPEG Converter
-Converts JPG, PNG, and HEIC images to optimized web-ready JPEGs
+Converts JPG, PNG, HEIC, and TIF/TIFF images to optimized web-ready JPEGs
 with drag-and-drop GUI support for files and folders.
 """
 
@@ -15,6 +15,7 @@ import threading
 # Register HEIC support
 try:
     import pillow_heif
+
     pillow_heif.register_heif_opener()
 except ImportError:
     # pillow-heif not installed, HEIC files won't be supported
@@ -55,7 +56,9 @@ class ImageConverterGUI:
 
         # ============ TOP ROW: Drop zone and Options ============
         top_frame = ttk.Frame(main_frame)
-        top_frame.grid(row=0, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N), pady=(0, 10))
+        top_frame.grid(
+            row=0, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N), pady=(0, 10)
+        )
         top_frame.columnconfigure(0, weight=1)
         top_frame.columnconfigure(1, weight=0)
 
@@ -68,7 +71,9 @@ class ImageConverterGUI:
             width=380,
             height=280,
         )
-        self.drop_frame.grid(row=0, column=0, sticky=(tk.N, tk.S, tk.W, tk.E), padx=(0, 10))
+        self.drop_frame.grid(
+            row=0, column=0, sticky=(tk.N, tk.S, tk.W, tk.E), padx=(0, 10)
+        )
         self.drop_frame.grid_propagate(False)
 
         drop_label = tk.Label(
@@ -92,7 +97,9 @@ class ImageConverterGUI:
         conversion_options_frame = ttk.LabelFrame(
             options_frame, text="Conversion Options", padding="10"
         )
-        conversion_options_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        conversion_options_frame.grid(
+            row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10)
+        )
 
         # Checkbox for keeping original dimensions
         self.keep_original_dimensions = tk.BooleanVar(value=False)
@@ -117,7 +124,9 @@ class ImageConverterGUI:
             variable=self.use_output_folder,
             command=self.toggle_output_folder,
         )
-        self.output_checkbox.grid(row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 5))
+        self.output_checkbox.grid(
+            row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 5)
+        )
 
         # Output folder path
         self.default_output_folder = r"C:\Users\Jeff\Desktop\webimg"
@@ -126,7 +135,9 @@ class ImageConverterGUI:
         self.output_entry = ttk.Entry(output_options_frame, width=30)
         self.output_entry.insert(0, self.default_output_folder)
         self.output_entry.config(state=tk.DISABLED)
-        self.output_entry.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5))
+        self.output_entry.grid(
+            row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5)
+        )
 
         self.output_browse_button = ttk.Button(
             output_options_frame,
@@ -163,24 +174,32 @@ class ImageConverterGUI:
         self.select_folder_button.grid(row=0, column=1, padx=2)
 
         # ============ BOTTOM SECTION: Status and Output ============
-        
+
         # Status label and progress bar
         status_frame = ttk.Frame(main_frame)
-        status_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5))
+        status_frame.grid(
+            row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5)
+        )
         status_frame.columnconfigure(1, weight=1)
 
-        ttk.Label(status_frame, text="Status:").grid(row=0, column=0, padx=(0, 5), sticky=tk.W)
-        
+        ttk.Label(status_frame, text="Status:").grid(
+            row=0, column=0, padx=(0, 5), sticky=tk.W
+        )
+
         self.status_label = ttk.Label(status_frame, text="Ready", foreground="green")
         self.status_label.grid(row=0, column=1, sticky=tk.W)
 
         # Progress bar
         self.progress = ttk.Progressbar(main_frame, mode="determinate")
-        self.progress.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5))
+        self.progress.grid(
+            row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 5)
+        )
 
         # Status text (console output)
         output_frame = ttk.LabelFrame(main_frame, text="Console Output", padding="5")
-        output_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S))
+        output_frame.grid(
+            row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S)
+        )
         output_frame.columnconfigure(0, weight=1)
         output_frame.rowconfigure(0, weight=1)
 
@@ -225,7 +244,10 @@ class ImageConverterGUI:
         files = filedialog.askopenfilenames(
             title="Select Images",
             filetypes=[
-                ("Image files", "*.jpg *.jpeg *.png *.heic *.HEIC *.avif *.AVIF *.jxl *.JXL *.webp *.WEBP"),
+                (
+                    "Image files",
+                    "*.jpg *.jpeg *.png *.heic *.HEIC *.avif *.AVIF *.jxl *.JXL *.webp *.WEBP *.tif *.TIF *.tiff *.TIFF",
+                ),
                 ("All files", "*.*"),
             ],
         )
@@ -274,6 +296,10 @@ class ImageConverterGUI:
             ".jxl",
             ".png",
             ".PNG",
+            ".tif",
+            ".TIF",
+            ".tiff",
+            ".TIFF",
             ".webp",
             ".WEBP",
         )
@@ -311,7 +337,17 @@ class ImageConverterGUI:
                 image_files = self.find_images_in_folder(item)
                 all_image_files.extend(image_files)
             elif os.path.isfile(item) and item.lower().endswith(
-                (".jpg", ".jpeg", ".png", ".heic", ".webp", ".avif", ".jxl")
+                (
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".heic",
+                    ".webp",
+                    ".avif",
+                    ".jxl",
+                    ".tif",
+                    ".tiff",
+                )
             ):
                 # If it's an image file, add it
                 all_image_files.append(item)
@@ -382,10 +418,31 @@ class ImageConverterGUI:
                 # Open image
                 img = Image.open(file_path)
 
-                # Convert HEIC or any image to RGB
-                if img.mode not in ("RGB", "L"):
-                    img = img.convert("RGB")
-                elif img.mode == "L":
+                # Auto-detect and convert CMYK to RGB (common in TIF/print files)
+                if img.mode == "CMYK":
+                    if "icc_profile" in img.info:
+                        import io
+
+                        try:
+                            input_profile = ImageCms.ImageCmsProfile(
+                                io.BytesIO(img.info["icc_profile"])
+                            )
+                            srgb_profile_obj = ImageCms.createProfile("sRGB")
+                            img = ImageCms.profileToProfile(
+                                img, input_profile, srgb_profile_obj, outputMode="RGB"
+                            )
+                            self.log_status(f"  CMYK → RGB (ICC profile used)")
+                        except Exception:
+                            img = img.convert("RGB")
+                            self.log_status(f"  CMYK → RGB (fallback conversion)")
+                    else:
+                        img = img.convert("RGB")
+                        self.log_status(
+                            f"  CMYK → RGB (no ICC profile, direct convert)"
+                        )
+
+                # Convert any other non-RGB modes (RGBA, L, P, etc.)
+                if img.mode not in ("RGB",):
                     img = img.convert("RGB")
 
                 # Get original dimensions
@@ -414,10 +471,9 @@ class ImageConverterGUI:
                 else:
                     self.log_status(f"  Size: {original_size} (original kept)")
 
-                # Convert to sRGB color space
+                # Convert to sRGB color space (for non-CMYK images that have an ICC profile)
                 try:
-                    # Try to get the image's color profile
-                    if "icc_profile" in img.info:
+                    if "icc_profile" in img.info and img.mode == "RGB":
                         import io
 
                         input_profile = ImageCms.ImageCmsProfile(
@@ -427,9 +483,6 @@ class ImageConverterGUI:
                             img, input_profile, srgb_profile, outputMode="RGB"
                         )
                         self.log_status(f"  Converted to sRGB color space")
-                    else:
-                        # No profile, assume sRGB
-                        pass
                 except Exception as e:
                     self.log_status(f"  Warning: Could not convert color profile: {e}")
 
