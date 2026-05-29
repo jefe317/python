@@ -10,7 +10,7 @@ Python scripts
 - **[files-show-duplicates-04.py](https://github.com/jefe317/python/blob/main/files-show-duplicates-04.py)** - Find TV and movie media files with ~same name, ask to keep only the smallest.
 - **[files-sort-organize-03.py](https://github.com/jefe317/python/blob/main/files-sort-organize-03.py)** - GUI to sort files into folders based on filetype, used to auto clean up my downloads folder.
 - **[folder-flatten-02.py](https://github.com/jefe317/python/blob/main/folder-flatten-02.py)** - Puts all sub folders and files into the current directory.
-- **[image-converter-for-web-05.py](https://github.com/jefe317/python/blob/main/image-converter-for-web-05.py)** - Used to convert images to web safe jpg, faster than loading photoshop, used to save filesize as well to avoid huge images.
+- **[image-converter-for-web-07.py](https://github.com/jefe317/python/blob/main/image-converter-for-web-07.py)** - Used to convert images to web safe jpg, faster than loading photoshop, used to save filesize as well to avoid huge images.
 - **[pdf-scan-words-01.py](https://github.com/jefe317/python/blob/main/pdf-scan-words-01.py)** - Scan PDF files for keywords, copy to folder for manual review, report pages keywords were found on. Used to find text in lots of long PDFs quickly.
 - **[timelapse_detector-01.py](https://github.com/jefe317/python/blob/main/timelapse_detector-01.py)** - Find timelapse photo sequences and organize into subfolders.
 - **[video-caption-fix-02.py](https://github.com/jefe317/python/blob/main/video-caption-fix-02.py)** - GUI to fix .srt caption timings by constant or drifting amount.
